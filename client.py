@@ -10,7 +10,7 @@ def main():
             "text": fr.read()
         }
         properties = {
-            "instruct": "Extract required output json fileds from the give text.",
+            "instruct": "Extract required output json fileds from the give 'text'.",
             "outputFormatJson": "{\n    \"Insured Name\": \"\",\n    \"Insurance No\": \"\",\n    \"Total Premium\": \"\",\n    \"next premium date\": \"\"\n}"
         }
         credentials = {}
