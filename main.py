@@ -39,24 +39,26 @@ class GPTExtractorTask(ServiceRunner):
             raise ValueError("OpenAI credentials are not provided")
 
         prompt = f"""
-            Instructions
-                1. Don't write code, directly perform task on the 'text'.
-                2. Put __START__ and __END__ to indicate the start and end of he final output.
-                3. If value does not exist then set \"\" .i.e is empty.
+            Instructions         
+                1. Do not write code. Directly perform the task on the provided 'text'.
+                2. Use "__START__" and "__END__" to indicate the start and end of the 'final output'.
+                3. If a value does not exist, set it as an empty string ("").
+                4. Format the output strictly as shown in the example below. Do not add any extra text or characters outside the specified JSON structure.
 
-            Input 'text' to extract from
+            Input 'text' to extract from:
             ----------
             ```
                 {inputs.text}
             ```
             ----------
 
-            Output as shown below format as json
+            Your final output should match the following format exactly:
             ----------
             __START__
             ```{properties["outputFormatJson"]}```
             __END__
             ----------
+            Make sure to replace placeholders with actual values extracted from the input text. If a specific value is not available in the input text, leave the value as an empty string.
         """
         client = OpenAI()
         
@@ -86,7 +88,12 @@ class GPTExtractorTask(ServiceRunner):
         else:
             raise ValueError("Failed to extract JSON from response.")
 
-        return {"predict": json.loads(extraction)}
+        result = None
+        try:
+            result = {"predict": json.loads(extraction)}
+        except json.decoder.JSONDecodeError:
+            print(response_text)
+        return result
 
 
 if __name__ == "__main__":
