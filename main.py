@@ -9,6 +9,15 @@ import re
 from augmatrix.block_service.service_runner import ServerManager, ServiceRunner
 from openai import OpenAI
 
+def bytes_to_escaped_string(byte_data):
+    # Use a generator expression to convert each byte to its escaped representation if needed
+    escaped_string = ''.join(
+        '\\n' if b == b'\n'[0] else
+        '\\r' if b == b'\r'[0] else
+        chr(b) for b in byte_data
+    )
+    return escaped_string
+
 class GPTExtractorTask(ServiceRunner):
     def __init__(self, logger: object) -> None:
         """
@@ -48,7 +57,7 @@ class GPTExtractorTask(ServiceRunner):
             Input 'text' to extract from:
             ----------
             ```
-                {inputs.text}
+                {bytes_to_escaped_string(inputs.text)}
             ```
             ----------
 
@@ -78,8 +87,8 @@ class GPTExtractorTask(ServiceRunner):
             raise ValueError("No response from OpenAI API.")
         
         response_text = response.choices[0].message.content.strip()
-        start_text = r"__START__\s+```"
-        end_text = "```\s+__END__"
+        start_text = r"__START__\s*```"
+        end_text = "```\s*__END__"
         match = re.search(f"{start_text}(?P<output>(.|\n)+){end_text}", response_text, re.DOTALL)
 
         if match:
