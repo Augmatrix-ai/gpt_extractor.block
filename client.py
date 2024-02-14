@@ -2,7 +2,7 @@ from augmatrix.block_service.client_runner import ClientRunner
 
 def main():
     # Initialize the client with the server's URL
-    client = ClientRunner(url='http://localhost:8083/')
+    client = ClientRunner(url='http://0.0.0.0:8083/')
 
     # Load the PDF file and specify properties and credentials
     with open("testdata/table.txt", "rb") as fr:

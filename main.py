@@ -98,7 +98,7 @@ class GPTExtractorTask(ServiceRunner):
 
 if __name__ == "__main__":
     ServerManager(GPTExtractorTask(logger=None)).start(
-        host="localhost",
+        host="0.0.0.0",
         port=8083,
         # Assuming TLS/SSL is not a requirement for this migration example.
         # If secure communication is required, uncomment and provide paths to the certificate and private key.
