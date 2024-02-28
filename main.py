@@ -37,7 +37,7 @@ class GPTExtractorTask(ServiceRunner):
 
         if openai.organization is None or openai.api_key is None:
             raise ValueError("OpenAI credentials are not provided")
-
+        input_text = inputs.text.replace("\n", "\n\n")
         prompt = f"""
             Instructions         
                 1. Do not write code. Directly perform the task on the provided 'text'.
@@ -48,7 +48,7 @@ class GPTExtractorTask(ServiceRunner):
             Input 'text' to extract from:
             ----------
             ```
-                {inputs.text}
+                {input_text}
             ```
             ----------
 
